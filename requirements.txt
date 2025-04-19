@@ -1,0 +1,14 @@
+# Agentic AI
+langchain-core==0.3.37
+langchain-openai==0.3.6
+langchain-experimental==0.3.4
+langgraph==0.2.74
+ipython==8.32.0
+
+# FastAPI
+# fastapi==0.115.6
+# uvicorn==0.33.0
+pydantic==2.10.4
+pydantic-settings==2.7.1
+# gunicorn==23.0.0
+# loguru==0.7.2
