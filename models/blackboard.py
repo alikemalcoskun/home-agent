@@ -2,7 +2,7 @@ from typing import List
 from enum import Enum
 from pydantic import BaseModel
 
-class Status(Enum):
+class Status(str, Enum):
     PENDING = "pending"
     IN_PROGRESS = "in_progress"
     COMPLETED = "completed"
@@ -18,6 +18,9 @@ class Step(BaseModel):
     description: str
     status: Status = Status.PENDING
 
+    class Config:
+        use_enum_values = True
+
     def __str__(self):
         return f"- Agent: {self.agent}\n- Description: {self.description}\n- Status: {self.status}"
     
@@ -31,6 +34,9 @@ class Step(BaseModel):
 class Plan(BaseModel):
     steps: List[Step] = []
     status: Status = Status.PENDING
+
+    class Config:
+        use_enum_values = True
 
     def __str__(self):
         return f"Steps: {self.steps}\nStatus: {self.status}"
@@ -47,6 +53,9 @@ class History(BaseModel):
     steps: List[Step]
     status: Status = Status.PENDING
 
+    class Config:
+        use_enum_values = True
+
     def __str__(self):
         return f"Steps: {self.steps}\nStatus: {self.status}"
     
@@ -61,6 +70,9 @@ class History(BaseModel):
 class Blackboard(BaseModel):
     plan: Plan = Plan(steps=[], status=Status.PENDING)
     history: History = History(steps=[], status=Status.PENDING)
+
+    class Config:
+        use_enum_values = True
 
     def __str__(self):
         return f"Plan: {self.plan}\nHistory: {self.history}"
