@@ -34,7 +34,10 @@ const ChatBox: React.FC = () => {
 
   const scrollToBottom = (ref: React.RefObject<HTMLDivElement | null>) => {
     if (ref.current) {
-      ref.current.scrollIntoView({ behavior: "smooth" });
+      const container = ref.current.parentElement;
+      if (container) {
+        container.scrollTop = container.scrollHeight;
+      }
     }
   };
 
@@ -60,9 +63,23 @@ const ChatBox: React.FC = () => {
     }
   }, [lastMessage]);
 
+  // Scroll to bottom when messages or steps change
+  useEffect(() => {
+    if (activeTab === "chat") {
+      scrollToBottom(messagesEndRef);
+    } else {
+      scrollToBottom(stepsEndRef);
+    }
+  }, [messages, steps, activeTab]);
+
   const formatMessage = (message: any): string => {
     if (message.status === "completed") {
-      return `${message.blackboard?.history?.steps?.map((step: any) => step.description).join(", ") || "No steps"}`;
+      const steps = message.blackboard?.history?.steps || [];
+      const orchestrationSteps = steps.filter((step: any) => 
+        step.agent.toLowerCase().includes('orchestration')
+      );
+      const lastOrchestrationStep = orchestrationSteps[orchestrationSteps.length - 1];
+      return lastOrchestrationStep?.description || "An error occurred. No message was generated.";
     }
     if (message.status === "error") {
       return `Error: ${message.error || "Unknown error"}`;
