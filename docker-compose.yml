@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+
+  # frontend:
+  #   build: ./frontend
+  #   container_name: home-agent-frontend
+  #   restart: always
+  #   working_dir: /app
+  #   volumes:
+  #     - ./frontend:/app
+  #     - /app/node_modules
+  #   ports:
+  #     - "3000:3000"
+  #   command: ["npm", "start"]
+  #   networks:
+  #     - home-agent-network
+
+
+  backend:
+    build: 
+      context: ./backend
+    container_name: home-agent-backend
+    restart: always
+    working_dir: /app
+    volumes:
+      - ./backend:/app
+    ports: 
+      - "5172:5172"
+    command: sh -c "uvicorn app.main:app --host 0.0.0.0 --port 5172  --reload"
+    networks: 
+      - home-agent-network
+  
+networks:
+  home-agent-network:
+    driver: bridge

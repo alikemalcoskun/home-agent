@@ -1,18 +1,18 @@
-from models.state import State
-from models.blackboard import Blackboard, Plan, History, Status
+from app.models.state import State
+from app.models.blackboard import Blackboard, Plan, History, Status
 from langgraph.graph import StateGraph, START, END
 from IPython.display import Image
-from agents.planner import PlannerAgent
-from agents.orchestration import OrchestrationAgent
-from agents.edge_agents.window import WindowAgent
-from agents.edge_agents.light import LightAgent
-from agents.edge_agents.stove import StoveAgent
-from agents.edge_agents.water_tank import WaterTankAgent
-from agents.edge_agents.weather import WeatherAgent
-from agents.edge_agents.news import NewsAgent
-from agents.edge_agents.calendar import CalendarAgent
-from agents.edge_agents.email import EmailAgent
-from agents.edge_agents.shopping import ShoppingAgent
+from app.agents.planner import PlannerAgent
+from app.agents.orchestration import OrchestrationAgent
+from app.agents.edge_agents.window import WindowAgent
+from app.agents.edge_agents.light import LightAgent
+from app.agents.edge_agents.stove import StoveAgent
+from app.agents.edge_agents.water_tank import WaterTankAgent
+from app.agents.edge_agents.weather import WeatherAgent
+from app.agents.edge_agents.news import NewsAgent
+from app.agents.edge_agents.calendar import CalendarAgent
+from app.agents.edge_agents.email import EmailAgent
+from app.agents.edge_agents.shopping import ShoppingAgent
 from typing import Dict, Any
 
 

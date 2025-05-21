@@ -1,7 +1,7 @@
-from agents.base import BaseAgent
+from app.agents.base import BaseAgent
 from typing import Dict, Any
-from services.llm import LLMService
-from models.blackboard import Blackboard, Status
+from app.services.llm import LLMService
+from app.models.blackboard import Blackboard, Status
 import json
 from langchain_core.prompts import ChatPromptTemplate
 

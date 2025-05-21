@@ -1,4 +1,4 @@
-from agents.edge_agents.edge import EdgeAgent
+from app.agents.edge_agents.edge import EdgeAgent
 from typing import Dict, Any
 
 from langchain_core.tools import Tool, StructuredTool

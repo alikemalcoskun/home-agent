@@ -1,6 +1,6 @@
-from agents.base import BaseAgent
-from models.state import State
-from models.blackboard import Blackboard
+from app.agents.base import BaseAgent
+from app.models.state import State
+from app.models.blackboard import Blackboard
 from typing import Dict, Any
 from langchain_core.prompts import ChatPromptTemplate
 import json

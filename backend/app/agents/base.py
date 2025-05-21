@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any, Dict
-from services.llm import LLMService
-from models.blackboard import Blackboard
+from app.services.llm import LLMService
+from app.models.blackboard import Blackboard
 
 class BaseAgent(ABC):
     def __init__(self):

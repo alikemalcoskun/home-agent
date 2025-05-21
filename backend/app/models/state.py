@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from typing import List
-from models.blackboard import Blackboard, Plan, History
+from app.models.blackboard import Blackboard, Plan, History
 
 
 class State(BaseModel):
