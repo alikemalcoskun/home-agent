@@ -4,6 +4,7 @@ from app.models.blackboard import Blackboard
 from typing import Dict, Any
 from langchain_core.prompts import ChatPromptTemplate
 import json
+from loguru import logger
 
 
 class PlannerAgent(BaseAgent):
@@ -31,7 +32,7 @@ class PlannerAgent(BaseAgent):
         """
 
     def execute(self, state: Dict[str, Any]) -> Dict[str, Any]:
-        print(f"Executing Planner Agent")
+        logger.info(f"Executing Planner Agent")
 
         self.state = state
         self.blackboard = state.blackboard

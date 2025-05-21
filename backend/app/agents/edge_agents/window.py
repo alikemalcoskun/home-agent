@@ -3,20 +3,22 @@ from typing import Dict, Any
 
 from langchain_core.tools import Tool, StructuredTool
 
+from loguru import logger
+
 def check_window_status(window_id: str, location: str) -> str:
-    print(f"Checking window status for {window_id} in {location}")
+    logger.info(f"Checking window status for {window_id} in {location}")
     return "closed"
 
 def close_window(window_id: str, location: str) -> str:
-    print(f"Closing window for {window_id} in {location}")
+    logger.info(f"Closing window for {window_id} in {location}")
     return "closed"
 
 def open_window(window_id: str, location: str) -> str:
-    print(f"Opening window for {window_id} in {location}")
+    logger.info(f"Opening window for {window_id} in {location}")
     return "open"
 
 def get_all_windows_status() -> Dict[str, str]:
-    print("Getting all windows status")
+    logger.info("Getting all windows status")
     return {"living_room": "closed", "bedroom": "open", "kitchen": "closed", "bathroom": "closed"}
 
 

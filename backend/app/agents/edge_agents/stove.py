@@ -3,24 +3,26 @@ from typing import Dict, Any
 
 from langchain_core.tools import StructuredTool
 
+from loguru import logger
+
 def check_stove_status() -> str:
-    print("Checking stove status")
+    logger.info("Checking stove status")
     return "off"
 
 def turn_stove_off() -> str:
-    print("Turning off stove")
+    logger.info("Turning off stove")
     return "off"
 
 def get_stove_temperature() -> int:
-    print("Getting stove temperature")
+    logger.info("Getting stove temperature")
     return 0
 
 def get_cooking_timer() -> int:
-    print("Getting cooking timer")
+    logger.info("Getting cooking timer")
     return 0
 
 def set_cooking_timer(minutes: int) -> str:
-    print(f"Setting cooking timer for {minutes} minutes")
+    logger.info(f"Setting cooking timer for {minutes} minutes")
     return f"Timer set for {minutes} minutes"
 
 

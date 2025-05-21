@@ -3,15 +3,17 @@ from typing import Dict, Any, List
 
 from langchain_core.tools import Tool, StructuredTool
 
+from loguru import logger
+
 def get_today_events() -> List[Dict[str, Any]]:
-    print("Getting today's events")
+    logger.info("Getting today's events")
     return [
         {"title": "Meeting", "time": "10:00", "location": "Conference Room"},
         {"title": "Lunch", "time": "12:00", "location": "Cafeteria"}
     ]
 
 def get_upcoming_events(days: int = 7) -> List[Dict[str, Any]]:
-    print(f"Getting upcoming events for {days} days")
+    logger.info(f"Getting upcoming events for {days} days")
     return [
         {"title": "Meeting", "date": "2023-04-20", "time": "10:00", "location": "Conference Room"},
         {"title": "Lunch", "date": "2023-04-20", "time": "12:00", "location": "Cafeteria"},
@@ -19,11 +21,11 @@ def get_upcoming_events(days: int = 7) -> List[Dict[str, Any]]:
     ]
 
 def add_event(title: str, date: str, time: str, location: str = None) -> Dict[str, Any]:
-    print(f"Adding event: {title} on {date} at {time}")
+    logger.info(f"Adding event: {title} on {date} at {time}")
     return {"title": title, "date": date, "time": time, "location": location, "status": "added"}
 
 def check_availability(date: str, time_slot: str) -> Dict[str, Any]:
-    print(f"Checking availability for {date} at {time_slot}")
+    logger.info(f"Checking availability for {date} at {time_slot}")
     return {"available": True, "conflicting_events": []}
 
 

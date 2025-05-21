@@ -3,8 +3,10 @@ from typing import Dict, Any
 
 from langchain_core.tools import StructuredTool
 
+from loguru import logger
+
 def get_current_weather() -> Dict[str, Any]:
-    print("Getting current weather")
+    logger.info("Getting current weather")
     return {
         "temperature": 72,
         "condition": "sunny",
@@ -13,7 +15,7 @@ def get_current_weather() -> Dict[str, Any]:
     }
 
 def get_weather_forecast(days: int = 3) -> Dict[str, Any]:
-    print(f"Getting weather forecast for {days} days")
+    logger.info(f"Getting weather forecast for {days} days")
     return {
         "forecast": [
             {"day": "today", "temperature": 72, "condition": "sunny"},
@@ -23,7 +25,7 @@ def get_weather_forecast(days: int = 3) -> Dict[str, Any]:
     }
 
 def get_weather_alerts() -> Dict[str, Any]:
-    print("Getting weather alerts")
+    logger.info("Getting weather alerts")
     return {
         "alerts": [
             {"type": "rain", "severity": "moderate", "time": "evening"}

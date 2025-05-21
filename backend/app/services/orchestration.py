@@ -15,6 +15,8 @@ from app.agents.edge_agents.email import EmailAgent
 from app.agents.edge_agents.shopping import ShoppingAgent
 from typing import Dict, Any
 
+from loguru import logger
+
 
 class OrchestrationService:
     def __init__(self):
@@ -61,7 +63,7 @@ class OrchestrationService:
     
     def _get_first_plan(self, state: State) -> State:
         """Get first plan from planner agent"""
-        print(f"Getting first plan")
+        logger.info("Getting first plan")
 
         # Increment iteration counter
         self.iteration_count += 1
@@ -85,7 +87,7 @@ class OrchestrationService:
         # Get pending steps from the plan
         pending_steps = [step for step in state.blackboard.plan.steps 
                          if step.status == Status.PENDING]
-        print(f"Pending steps: {pending_steps}")
+        logger.info(f"Pending steps: {pending_steps}")
         
         # Execute each pending step with the appropriate agent
         for step in pending_steps:
@@ -99,11 +101,11 @@ class OrchestrationService:
 
     def _check_completion(self, state: State) -> State:
         """Check if we should continue or end the session"""
-        print(f"Uncompleted steps: {[step for step in state.blackboard.plan.steps if step.status != Status.COMPLETED]}")
+        logger.info(f"Uncompleted steps: {[step for step in state.blackboard.plan.steps if step.status != Status.COMPLETED]}")
         # Check if all steps in the plan are completed
         all_completed = all(step.status == Status.COMPLETED 
                            for step in state.blackboard.plan.steps)
-        print(f"All completed: {all_completed}")
+        logger.info(f"All completed: {all_completed}")
         
         # If all steps are completed, mark the plan as completed
         if all_completed:
@@ -114,11 +116,11 @@ class OrchestrationService:
     def _should_end(self, state: State) -> bool:
         """Conditional edge function to determine if we should continue"""
         # Continue if history has an END step and we haven't exceeded max iterations
-        print(f"Last step: {state.blackboard.history.steps[-1] if len(state.blackboard.history.steps) > 0 else 'None'}")
+        logger.info(f"Last step: {state.blackboard.history.steps[-1] if len(state.blackboard.history.steps) > 0 else 'None'}")
         all_completed = all(step.status == Status.COMPLETED for step in state.blackboard.plan.steps)
         iteration_count_reached = self.iteration_count >= self.max_iterations
-        print(f"All completed: {all_completed}, Iteration count reached: {iteration_count_reached}")
-        print(f"Ended: {all_completed or iteration_count_reached}")
+        logger.info(f"All completed: {all_completed}, Iteration count reached: {iteration_count_reached}")
+        logger.info(f"Ended: {all_completed or iteration_count_reached}")
         return all_completed or iteration_count_reached
 
     def compile_workflow(self):

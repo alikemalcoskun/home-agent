@@ -3,24 +3,26 @@ from typing import Dict, Any
 
 from langchain_core.tools import StructuredTool
 
+from loguru import logger
+
 def check_water_level() -> int:
-    print("Checking water level")
+    logger.info("Checking water level")
     return 5
 
 def get_water_usage(timeframe: str) -> Dict[str, int]:
-    print(f"Getting water usage for {timeframe}")
+    logger.info(f"Getting water usage for {timeframe}")
     return {"daily": 100, "weekly": 700, "monthly": 3000}
 
 def check_water_quality() -> str:
-    print("Checking water quality")
+    logger.info("Checking water quality")
     return "good"
 
 def get_tank_status() -> Dict[str, Any]:
-    print("Getting tank status")
+    logger.info("Getting tank status")
     return {"level": 95, "quality": "good", "last_maintenance": "2023-01-01"}
 
 def set_water_alert(threshold: int) -> str:
-    print(f"Setting water alert for threshold {threshold}")
+    logger.info(f"Setting water alert for threshold {threshold}")
     return f"Alert set for water level below {threshold}%"
 
 

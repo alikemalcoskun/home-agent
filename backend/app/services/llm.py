@@ -9,6 +9,8 @@ import logging
 from dotenv import load_dotenv
 import os
 
+from loguru import logger
+
 
 
 class LLMService:
@@ -45,7 +47,7 @@ class LLMService:
             try:
                 return self.json_output_parser.parse(response_content)
             except Exception as e:
-                print(f"Error parsing JSON: {e}")
+                logger.error(f"Error parsing JSON: {e}")
                 # Return a default structure if parsing fails
                 return {}
         
@@ -63,7 +65,7 @@ class LLMService:
         tool_responses = []
         if response.tool_calls:
             for tool_call in response.tool_calls:
-                print(f"Tool call: {tool_call}")
+                logger.info(f"Tool call: {tool_call}")
                 selected_tool = tools_dict[tool_call["name"]]
                 
                 # Get the tool arguments
@@ -88,7 +90,7 @@ class LLMService:
                     # If the tool doesn't have an args_schema, use the arguments as is
                     tool_args = tool_call["args"]
                 
-                print(f"Tool args: {tool_args}")
+                logger.info(f"Tool args: {tool_args}")
                 
                 tool_response = selected_tool.invoke(tool_args)
                 tool_responses.append({"name": tool_call["name"], "args": tool_args, "response": tool_response})

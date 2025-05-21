@@ -3,8 +3,10 @@ from typing import Dict, Any, List
 
 from langchain_core.tools import Tool, StructuredTool
 
+from loguru import logger
+
 def get_top_headlines() -> List[Dict[str, str]]:
-    print("Getting top headlines")
+    logger.info("Getting top headlines")
     return [
         {"title": "Breaking News", "source": "CNN", "url": "https://example.com/1"},
         {"title": "Local Update", "source": "Local News", "url": "https://example.com/2"},
@@ -12,14 +14,14 @@ def get_top_headlines() -> List[Dict[str, str]]:
     ]
 
 def get_news_by_category(category: str) -> List[Dict[str, str]]:
-    print(f"Getting news by category: {category}")
+    logger.info(f"Getting news by category: {category}")
     return [
         {"title": f"{category} News 1", "source": "News Source", "url": "https://example.com/4"},
         {"title": f"{category} News 2", "source": "News Source", "url": "https://example.com/5"}
     ]
 
 def search_news(query: str) -> List[Dict[str, str]]:
-    print(f"Searching news for: {query}")
+    logger.info(f"Searching news for: {query}")
     return [
         {"title": f"Result for {query} 1", "source": "News Source", "url": "https://example.com/6"},
         {"title": f"Result for {query} 2", "source": "News Source", "url": "https://example.com/7"}

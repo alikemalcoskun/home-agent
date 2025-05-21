@@ -3,26 +3,28 @@ from typing import Dict, Any, List
 
 from langchain_core.tools import Tool, StructuredTool
 
+from loguru import logger
+
 def get_unread_emails() -> List[Dict[str, Any]]:
-    print("Getting unread emails")
+    logger.info("Getting unread emails")
     return [
         {"id": "1", "from": "sender1@example.com", "subject": "Important Meeting", "date": "2023-04-19"},
         {"id": "2", "from": "sender2@example.com", "subject": "Project Update", "date": "2023-04-19"}
     ]
 
 def search_emails(query: str) -> List[Dict[str, Any]]:
-    print(f"Searching emails for: {query}")
+    logger.info(f"Searching emails for: {query}")
     return [
         {"id": "3", "from": "sender3@example.com", "subject": f"Email about {query}", "date": "2023-04-18"},
         {"id": "4", "from": "sender4@example.com", "subject": f"Regarding {query}", "date": "2023-04-17"}
     ]
 
 def send_email(to: str, subject: str, body: str) -> Dict[str, Any]:
-    print(f"Sending email to {to} with subject: {subject}")
+    logger.info(f"Sending email to {to} with subject: {subject}")
     return {"status": "sent", "to": to, "subject": subject}
 
 def mark_email_as_read(email_id: str) -> Dict[str, Any]:
-    print(f"Marking email {email_id} as read")
+    logger.info(f"Marking email {email_id} as read")
     return {"status": "marked as read", "email_id": email_id}
 
 

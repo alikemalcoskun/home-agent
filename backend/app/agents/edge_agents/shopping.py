@@ -3,8 +3,10 @@ from typing import Dict, Any, List
 
 from langchain_core.tools import StructuredTool
 
+from loguru import logger
+
 def search_products(query: str) -> List[Dict[str, Any]]:
-    print(f"Searching products for: {query}")
+    logger.info(f"Searching products for: {query}")
     return [
         {"name": f"{query} Product 1", "price": 19.99, "store": "Store A", "in_stock": True},
         {"name": f"{query} Product 2", "price": 29.99, "store": "Store B", "in_stock": True},
@@ -12,7 +14,7 @@ def search_products(query: str) -> List[Dict[str, Any]]:
     ]
 
 def get_shopping_history() -> List[Dict[str, Any]]:
-    print("Getting shopping history")
+    logger.info("Getting shopping history")
     return [
         {"date": "2023-04-15", "items": ["Item 1", "Item 2"], "total": 49.98},
         {"date": "2023-04-10", "items": ["Item 3"], "total": 19.99},
@@ -20,7 +22,7 @@ def get_shopping_history() -> List[Dict[str, Any]]:
     ]
 
 def get_current_offers() -> List[Dict[str, Any]]:
-    print("Getting current offers")
+    logger.info("Getting current offers")
     return [
         {"item": "Item 1", "discount": "20%", "valid_until": "2023-04-30"},
         {"item": "Item 2", "discount": "10%", "valid_until": "2023-05-15"},
@@ -28,11 +30,11 @@ def get_current_offers() -> List[Dict[str, Any]]:
     ]
 
 def add_to_cart(item: str, quantity: int = 1) -> Dict[str, Any]:
-    print(f"Adding {quantity} of {item} to cart")
+    logger.info(f"Adding {quantity} of {item} to cart")
     return {"status": "added", "item": item, "quantity": quantity}
 
 def checkout() -> Dict[str, Any]:
-    print("Checking out cart")
+    logger.info("Checking out cart")
     return {"status": "completed", "order_id": "12345", "total": 69.98}
 
 

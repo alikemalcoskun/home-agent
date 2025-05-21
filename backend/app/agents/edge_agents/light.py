@@ -3,20 +3,22 @@ from typing import Dict, Any
 
 from langchain_core.tools import Tool, StructuredTool
 
+from loguru import logger
+
 def check_light_status(light_id: str, location: str) -> str:
-    print(f"Checking light status for {light_id} in {location}")
+    logger.info(f"Checking light status for {light_id} in {location}")
     return "off"
 
 def turn_light_on(light_id: str, location: str) -> str:
-    print(f"Turning on light for {light_id} in {location}")
+    logger.info(f"Turning on light for {light_id} in {location}")
     return "on"
 
 def turn_light_off(light_id: str, location: str) -> str:
-    print(f"Turning off light for {light_id} in {location}")
+    logger.info(f"Turning off light for {light_id} in {location}")
     return "off"
 
 def get_all_lights_status() -> Dict[str, str]:
-    print("Getting all lights status")
+    logger.info("Getting all lights status")
     return {"living_room": "on", "bedroom": "off", "kitchen": "on", "bathroom": "off"}
 
 

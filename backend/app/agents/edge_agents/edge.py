@@ -4,6 +4,7 @@ from app.services.llm import LLMService
 from app.models.blackboard import Blackboard, Status
 import json
 from langchain_core.prompts import ChatPromptTemplate
+from loguru import logger
 
 class EdgeAgent(BaseAgent):
     def __init__(self):
@@ -59,7 +60,7 @@ class EdgeAgent(BaseAgent):
         pending_actions = [step for step in self.blackboard.plan.steps if step.status == Status.PENDING and step.agent == self.slug]
 
         if len(pending_actions) == 0:
-            print(f"No pending actions for {self.name}")
+            logger.info(f"No pending actions for {self.name}")
             return None
 
         user_prompt = '''
