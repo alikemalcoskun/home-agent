@@ -5,6 +5,7 @@ from app.models.agent import AgentRequest, AgentResponse
 from app.services.orchestration import OrchestrationService
 from app.models.state import State
 from loguru import logger
+import json
 
 # Initialize Celery with both broker and result backend
 celery_app = Celery(
@@ -34,9 +35,14 @@ def process_agent_task(request_data: Dict):
         state_dict = orchestrator.invoke(initial_state.model_dump())
         state = State(**state_dict)
         
+        # Convert blackboard to dictionary for JSON serialization
+        blackboard_dict = json.loads(state.blackboard.model_dump_json())
+
+        logger.info(f"Blackboard: {blackboard_dict}, {type(blackboard_dict)}")
+        
         return {
             "status": "completed",
-            "blackboard": state.blackboard
+            "blackboard": blackboard_dict
         }
     except Exception as e:
         logger.error(f"Error in agent task: {e}")
@@ -82,14 +88,25 @@ async def run_agent_workflow(request: AgentRequest):
 )
 async def get_task_status(task_id: str):
     task = process_agent_task.AsyncResult(task_id)
+    
     if task.ready():
         if task.successful():
             return task.result
         else:
+            # Handle different types of task failures
+            error_message = "Unknown error"
+            if isinstance(task.result, dict) and 'error' in task.result:
+                error_message = task.result['error']
+            elif isinstance(task.result, Exception):
+                error_message = str(task.result)
+            elif task.result is not None:
+                error_message = str(task.result)
+                
             raise HTTPException(
                 status_code=500,
-                detail=f"Task failed: {task.result.get('error', 'Unknown error')}"
+                detail=f"Task failed: {error_message}"
             )
+            
     return {
         "task_id": task_id,
         "status": "processing"
