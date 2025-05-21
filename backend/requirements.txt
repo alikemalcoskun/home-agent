@@ -16,3 +16,4 @@ loguru==0.7.2
 # Async
 celery==5.4.0
 redis==5.0.0
+flower==2.0.1
