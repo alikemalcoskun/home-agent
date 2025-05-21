@@ -2,7 +2,7 @@ from fastapi import APIRouter, status, HTTPException
 from celery import Celery
 from typing import Dict
 from app.models.agent import AgentRequest
-from app.services.orchestration import OrchestrationService
+from app.services.orchestration_async import OrchestrationServiceAsync
 from app.models.state import State
 from loguru import logger
 import json
@@ -28,7 +28,9 @@ celery_app.conf.update(
 @celery_app.task
 def process_agent_task(request_data: Dict):
     try:
-        orchestrator = OrchestrationService()
+        orchestrator = OrchestrationServiceAsync(
+            process_agent_task.request.id
+        )
         orchestrator.generate_workflow()
         orchestrator.compile_workflow()
 
@@ -38,15 +40,6 @@ def process_agent_task(request_data: Dict):
         
         # Convert blackboard to dictionary for JSON serialization
         blackboard_dict = json.loads(state.blackboard.model_dump_json())
-
-        # Send update to WebSocket
-        broadcast_task_update(
-            process_agent_task.request.id,
-            {
-                "status": "completed",
-                "blackboard": blackboard_dict
-            }
-        )
         
         logger.info(f"Blackboard: {blackboard_dict}, {type(blackboard_dict)}")
         
