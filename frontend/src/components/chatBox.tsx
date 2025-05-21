@@ -22,14 +22,27 @@ const ChatBox: React.FC = () => {
   // Handle WebSocket messages
   useEffect(() => {
     if (lastMessage) {
-      addMessage({
-        text: JSON.stringify(lastMessage, null, 2),
-        sender: "system",
-        type: lastMessage.status || "processing",
-        data: lastMessage
-      });
+      // Only add messages that are completed or error
+      if (lastMessage.status === "completed" || lastMessage.status === "error") {
+        addMessage({
+          text: formatMessage(lastMessage),
+          sender: "system",
+          type: lastMessage.status,
+          data: lastMessage
+        });
+      }
     }
   }, [lastMessage]);
+
+  const formatMessage = (message: any): string => {
+    if (message.status === "completed") {
+      return `${message.blackboard?.history?.steps?.map((step: any) => step.description).join(", ") || "No steps"}`;
+    }
+    if (message.status === "error") {
+      return `Error: ${message.error || "Unknown error"}`;
+    }
+    return JSON.stringify(message, null, 2);
+  };
 
   const addMessage = (message: Message) => {
     setMessages((prev: Message[]) => [...prev, message]);
@@ -58,11 +71,6 @@ const ChatBox: React.FC = () => {
       const data: TaskResponse = await response.json();
 
       if (response.ok) {
-        addMessage({
-          text: `Task created with ID: ${data.task_id}`,
-          sender: "system",
-          type: "processing"
-        });
         setCurrentTaskId(data.task_id);
         connect(data.task_id);
       } else {
@@ -90,6 +98,63 @@ const ChatBox: React.FC = () => {
 
   return (
     <div className="dashboard-box chatbox-widget">
+      <style>
+        {`
+          .chat-message {
+            margin: 8px 0;
+            padding: 10px;
+            border-radius: 8px;
+            max-width: 80%;
+          }
+          .user-msg {
+            background-color: #e3f2fd;
+            margin-left: auto;
+          }
+          .system-msg {
+            background-color: #f5f5f5;
+            margin-right: auto;
+          }
+          .error {
+            background-color: #ffebee !important;
+            color: #c62828;
+            border: 1px solid #ef9a9a;
+          }
+          .completed {
+            background-color: #e8f5e9 !important;
+            color: #2e7d32;
+            border: 1px solid #a5d6a7;
+          }
+          .chatbox-messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 10px;
+          }
+          .chatbox-input {
+            display: flex;
+            gap: 10px;
+          }
+          .chatbox-input input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+          }
+          .chatbox-input button {
+            padding: 8px 16px;
+            background-color: #2196f3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+          }
+          .chatbox-input button:hover {
+            background-color: #1976d2;
+          }
+        `}
+      </style>
       <h2>Chat Box</h2>
       <div className="chatbox-messages">
         {messages.map((msg: Message, idx: number) => (
