@@ -544,7 +544,7 @@ code {
 .chatbox-widget {
   display: flex;
   flex-direction: column;
-  min-height: 500px;
+  min-height: 800px;
   width: 100%;
   overflow: hidden;
   flex: 1 1 100%;
