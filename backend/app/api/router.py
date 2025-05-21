@@ -1,10 +1,6 @@
 from fastapi import APIRouter
-from app.api.routes import agent
-from app.api.routes import key
+from app.api.v1.router import router as v1_router
 
 router = APIRouter()
 
-router.include_router(
-    agent.router, tags=["Agent"], prefix="/agent")
-router.include_router(
-    key.router, tags=["Key"], prefix="/key")
+router.include_router(v1_router, prefix="/v1")
