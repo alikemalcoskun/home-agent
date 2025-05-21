@@ -49,7 +49,21 @@ services:
       - redis
     networks: 
       - home-agent-network
-  
+    
+  frontend:
+    build: ./frontend
+    container_name: home-agent-frontend
+    restart: always
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    command: ["npm", "start"]
+    networks:
+      - home-agent-network
+
 networks:
   home-agent-network:
     driver: bridge
