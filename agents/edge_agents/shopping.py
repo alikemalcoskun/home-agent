@@ -87,16 +87,16 @@ class ShoppingAgent(EdgeAgent):
                 args_schema={
                     "type": "object",
                     "properties": {
-                        "product_id": {
+                        "item": {
                             "type": "string",
-                            "description": "ID of the product to add to cart"
+                            "description": "Name or ID of the item to add to cart"
                         },
                         "quantity": {
                             "type": "integer",
-                            "description": "Quantity of the product to add"
+                            "description": "Quantity of the item to add"
                         }
                     },
-                    "required": ["product_id", "quantity"]
+                    "required": ["item"]
                 }
             ),
             StructuredTool.from_function(

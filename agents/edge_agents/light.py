@@ -29,7 +29,7 @@ class LightAgent(EdgeAgent):
         
         # Mock function tools for light operations
         self.tools = [
-            Tool(
+            StructuredTool.from_function(
                 name="check_light_status",
                 description="Check the status of the light",
                 func=check_light_status,
@@ -48,7 +48,7 @@ class LightAgent(EdgeAgent):
                     "required": ["light_id", "location"]
                 }
             ),
-            Tool(
+            StructuredTool.from_function(
                 name="turn_light_on",
                 description="Turn on the light",
                 func=turn_light_on,
@@ -67,7 +67,7 @@ class LightAgent(EdgeAgent):
                     "required": ["light_id", "location"]
                 }
             ),
-            Tool(
+            StructuredTool.from_function(
                 name="turn_light_off",
                 description="Turn off the light",
                 func=turn_light_off,

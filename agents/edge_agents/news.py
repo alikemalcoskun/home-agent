@@ -45,7 +45,7 @@ class NewsAgent(EdgeAgent):
                     "required": []
                 }
             ),
-            Tool(
+            StructuredTool.from_function(
                 name="get_news_by_category",
                 description="Get news by category",
                 func=get_news_by_category,
@@ -60,7 +60,7 @@ class NewsAgent(EdgeAgent):
                     "required": ["category"]
                 }
             ),
-            Tool(
+            StructuredTool.from_function(
                 name="search_news",
                 description="Search for news articles",
                 func=search_news,

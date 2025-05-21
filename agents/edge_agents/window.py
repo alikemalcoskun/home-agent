@@ -29,7 +29,7 @@ class WindowAgent(EdgeAgent):
         
         # Mock function tools for window operations
         self.tools = [
-            Tool(
+            StructuredTool.from_function(
                 name="check_window_status",
                 description="Check the status of the window",
                 func=check_window_status,
@@ -48,7 +48,7 @@ class WindowAgent(EdgeAgent):
                     "required": ["window_id", "location"]
                 }
             ),
-            Tool(
+            StructuredTool.from_function(
                 name="close_window",
                 description="Close the window",
                 func=close_window,
@@ -67,7 +67,7 @@ class WindowAgent(EdgeAgent):
                     "required": ["window_id", "location"]
                 }
             ),
-            Tool(
+            StructuredTool.from_function(
                 name="open_window",
                 description="Open the window",
                 func=open_window,

@@ -1,7 +1,7 @@
 from agents.edge_agents.edge import EdgeAgent
 from typing import Dict, Any, List
 
-from langchain_core.tools import Tool
+from langchain_core.tools import Tool, StructuredTool
 
 def get_unread_emails() -> List[Dict[str, Any]]:
     print("Getting unread emails")
@@ -35,13 +35,17 @@ class EmailAgent(EdgeAgent):
         
         # Mock function tools for email operations
         self.tools = [
-            Tool(
+            StructuredTool.from_function(
                 name="get_unread_emails",
                 description="Get unread emails",
                 func=get_unread_emails,
-                args_schema=None
+                args_schema={
+                    "type": "object",
+                    "properties": {},
+                    "required": []
+                }
             ),
-            Tool(
+            StructuredTool.from_function(
                 name="search_emails",
                 description="Search for emails",
                 func=search_emails,
@@ -56,7 +60,7 @@ class EmailAgent(EdgeAgent):
                     "required": ["query"]
                 }
             ),
-            Tool(
+            StructuredTool.from_function(
                 name="send_email",
                 description="Send an email",
                 func=send_email,
@@ -79,7 +83,7 @@ class EmailAgent(EdgeAgent):
                     "required": ["to", "subject", "body"]
                 }
             ),
-            Tool(
+            StructuredTool.from_function(
                 name="mark_email_as_read",
                 description="Mark an email as read",
                 func=mark_email_as_read,

@@ -63,6 +63,7 @@ class LLMService:
         tool_responses = []
         if response.tool_calls:
             for tool_call in response.tool_calls:
+                print(f"Tool call: {tool_call}")
                 selected_tool = tools_dict[tool_call["name"]]
                 
                 # Get the tool arguments
@@ -86,6 +87,8 @@ class LLMService:
                 else:
                     # If the tool doesn't have an args_schema, use the arguments as is
                     tool_args = tool_call["args"]
+                
+                print(f"Tool args: {tool_args}")
                 
                 tool_response = selected_tool.invoke(tool_args)
                 tool_responses.append({"name": tool_call["name"], "args": tool_args, "response": tool_response})

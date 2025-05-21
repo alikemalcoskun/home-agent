@@ -46,7 +46,7 @@ class CalendarAgent(EdgeAgent):
                     "required": []
                 }
             ),
-            Tool(
+            StructuredTool.from_function(
                 name="get_upcoming_events",
                 description="Get upcoming events for specified days",
                 func=get_upcoming_events,
@@ -61,7 +61,7 @@ class CalendarAgent(EdgeAgent):
                     "required": ["days"]
                 }
             ),
-            Tool(
+            StructuredTool.from_function(
                 name="add_event",
                 description="Add a new calendar event",
                 func=add_event,
@@ -88,7 +88,7 @@ class CalendarAgent(EdgeAgent):
                     "required": ["title", "date", "time"]
                 }
             ),
-            Tool(
+            StructuredTool.from_function(
                 name="check_availability",
                 description="Check availability for a date and time",
                 func=check_availability,

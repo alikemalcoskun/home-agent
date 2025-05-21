@@ -17,7 +17,7 @@ def check_water_quality() -> str:
 
 def get_tank_status() -> Dict[str, Any]:
     print("Getting tank status")
-    return {"level": 5, "quality": "good", "last_maintenance": "2023-01-01"}
+    return {"level": 95, "quality": "good", "last_maintenance": "2023-01-01"}
 
 def set_water_alert(threshold: int) -> str:
     print(f"Setting water alert for threshold {threshold}")
