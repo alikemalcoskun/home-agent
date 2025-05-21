@@ -6,27 +6,33 @@ from langchain_core.prompts import ChatPromptTemplate
 import json
 
 
-class OrchestrationAgent(BaseAgent):
+class PlannerAgent(BaseAgent):
     def __init__(self):
         super().__init__()
 
-        self.name = "orchestration"
+        self.name = "planner"
         self.description = f"""
         Your task is to create a plan to run the agents according to the information provided by the user or an IOT device.
 
-        You will be given a user request, a list of agents, and a blackboard that contains the history of the plan and the agents' results.
+        You will be given a user request and a list of agents.
 
-        You need to determine if further actions are needed.
-        If the plan is not completed, you need to create a new plan, and add a new 'pending' orchestration step to the history.
-        If the plan is completed, you need to add a new 'completed' orchestration step to the history with a brief summary of agent results such as 'You have 3 meetings today, also New York is sunny today'.
+        You need to create a plan to run the agents according to the user's request.
 
-        INVOKE ONLY THE AGENTS THAT ARE NEEDED FOR THE FUTURE ACTIONS!
+        If your request is request by an IOT device(it is informed in the request).
+        Create a new flow by the information provided by the IOT device.
+        For example, if the user request is "Weather API: Rainy this evening", check the windows.
+        
+        Please add your plan details(what is your purpose to invoke the agent) to the history of the blackboard.
+
+        INVOKE ONLY THE AGENTS THAT ARE NEEDED FOR THE REQUEST!
 
         You need to return the blackboard as JSON with the following format:
             {str(self.blackboard.get_schema())}
         """
 
     def execute(self, state: Dict[str, Any]) -> Dict[str, Any]:
+        print(f"Executing Planner Agent")
+
         self.state = state
         self.blackboard = state.blackboard
         self.prompt = self.get_prompt(state)

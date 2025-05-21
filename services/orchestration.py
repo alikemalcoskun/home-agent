@@ -2,6 +2,7 @@ from models.state import State
 from models.blackboard import Blackboard, Plan, History, Status
 from langgraph.graph import StateGraph, START, END
 from IPython.display import Image
+from agents.planner import PlannerAgent
 from agents.orchestration import OrchestrationAgent
 from agents.edge_agents.window import WindowAgent
 from agents.edge_agents.light import LightAgent
@@ -20,9 +21,10 @@ class OrchestrationService:
         self.router_builder = StateGraph(State)
         self.workflow = None
         self.iteration_count = 0
-        self.max_iterations = 2  # Maximum number of iterations to prevent infinite loops
+        self.max_iterations = 5  # Maximum number of iterations to prevent infinite loops
 
         # Initialize agents
+        self.planner_agent = PlannerAgent()
         self.orchestration_agent = OrchestrationAgent()
         self.edge_agents = {
             "window": WindowAgent(),
@@ -38,22 +40,35 @@ class OrchestrationService:
 
     def generate_workflow(self) -> StateGraph:
         # Add nodes for each step in the pipeline
+        self.router_builder.add_node("get_first_plan", self._get_first_plan)
         self.router_builder.add_node("get_plan", self._get_plan)
         self.router_builder.add_node("execute_edge_agents", self._execute_edge_agents)
         self.router_builder.add_node("check_completion", self._check_completion)
 
         # Add edges to connect nodes
-        self.router_builder.add_edge(START, "get_plan")
-        self.router_builder.add_edge("get_plan", "execute_edge_agents")
-        self.router_builder.add_edge("execute_edge_agents", "check_completion")
+        self.router_builder.add_edge(START, "get_first_plan")
+        self.router_builder.add_edge("get_first_plan", "execute_edge_agents")
+        self.router_builder.add_edge("execute_edge_agents", "get_plan")
+        self.router_builder.add_edge("get_plan", "check_completion")
         self.router_builder.add_conditional_edges(
             "check_completion",
-            self._should_continue,
+            self._should_end,
             {
-                True: "get_plan",
-                False: END
+                True: END,
+                False: "execute_edge_agents"
             }
         )
+    
+    def _get_first_plan(self, state: State) -> State:
+        """Get first plan from planner agent"""
+        print(f"Getting first plan")
+
+        # Increment iteration counter
+        self.iteration_count += 1
+
+        result = self.planner_agent.execute(state)
+        state.blackboard = Blackboard(**result["blackboard"])
+        return state
 
     def _get_plan(self, state: State) -> State:
         """Get plan from orchestration agent"""
@@ -70,6 +85,7 @@ class OrchestrationService:
         # Get pending steps from the plan
         pending_steps = [step for step in state.blackboard.plan.steps 
                          if step.status == Status.PENDING]
+        print(f"Pending steps: {pending_steps}")
         
         # Execute each pending step with the appropriate agent
         for step in pending_steps:
@@ -83,9 +99,11 @@ class OrchestrationService:
 
     def _check_completion(self, state: State) -> State:
         """Check if we should continue or end the session"""
+        print(f"Uncompleted steps: {[step for step in state.blackboard.plan.steps if step.status != Status.COMPLETED]}")
         # Check if all steps in the plan are completed
         all_completed = all(step.status == Status.COMPLETED 
                            for step in state.blackboard.plan.steps)
+        print(f"All completed: {all_completed}")
         
         # If all steps are completed, mark the plan as completed
         if all_completed:
@@ -93,11 +111,15 @@ class OrchestrationService:
         
         return state
 
-    def _should_continue(self, state: State) -> bool:
+    def _should_end(self, state: State) -> bool:
         """Conditional edge function to determine if we should continue"""
-        # Continue if the plan is not completed and we haven't exceeded max iterations
-        return (state.blackboard.plan.status != Status.COMPLETED and 
-                self.iteration_count < self.max_iterations)
+        # Continue if history has an END step and we haven't exceeded max iterations
+        print(f"Last step: {state.blackboard.history.steps[-1] if len(state.blackboard.history.steps) > 0 else 'None'}")
+        all_completed = all(step.status == Status.COMPLETED for step in state.blackboard.plan.steps)
+        iteration_count_reached = self.iteration_count >= self.max_iterations
+        print(f"All completed: {all_completed}, Iteration count reached: {iteration_count_reached}")
+        print(f"Ended: {all_completed or iteration_count_reached}")
+        return all_completed or iteration_count_reached
 
     def compile_workflow(self):
         """Compile the workflow"""
