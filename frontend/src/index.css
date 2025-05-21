@@ -10,6 +10,7 @@
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Borel&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
 body {
   margin: 0;
@@ -543,14 +544,56 @@ code {
 .chatbox-widget {
   display: flex;
   flex-direction: column;
-  min-height: 200px;
+  min-height: 500px;
   width: 100%;
   overflow: hidden;
   flex: 1 1 100%;
   max-width: 100%;
+  height: 700px;
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--color-teal);
+  margin-bottom: 15px;
+}
+
+.tab {
+  padding: 10px 20px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  color: var(--color-dark);
+  opacity: 0.7;
+}
+
+.tab.active {
+  color: var(--color-magenta);
+  border-bottom-color: var(--color-magenta);
+  opacity: 1;
+}
+
+.tab-content {
+  flex: 1;
+  display: none;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.tab-content.active {
+  display: flex;
 }
 
 .chatbox-messages {
+  flex: 1;
+  background-color: white;
+  border-radius: 8px;
+  padding: 10px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.steps-container {
   flex: 1;
   background-color: white;
   border-radius: 8px;
@@ -583,9 +626,20 @@ code {
   margin-right: auto;
 }
 
+.error {
+  background-color: var(--color-orange) !important;
+  color: var(--color-light) !important;
+}
+
+.completed {
+  background-color: var(--color-green) !important;
+  color: var(--color-dark) !important;
+}
+
 .chatbox-input {
   display: flex;
   gap: 10px;
+  padding: 10px 0;
 }
 
 .chatbox-input input {
@@ -612,4 +666,89 @@ code {
 
 .chatbox-input button:hover {
   background-color: var(--color-orange);
+}
+
+.steps-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.step-item {
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 8px;
+  background-color: white;
+  border: 1px solid var(--color-teal);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.step-agent {
+  font-weight: bold;
+  color: var(--color-magenta);
+  text-transform: uppercase;
+  min-width: 120px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.step-description {
+  flex: 1;
+  color: var(--color-dark);
+}
+
+.step-status {
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 0.8em;
+  white-space: nowrap;
+}
+
+.agent-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: var(--color-teal);
+  color: var(--color-dark);
+  font-weight: bold;
+}
+
+.agent-icon .material-icons {
+  font-size: 16px;
+}
+
+.planner-icon {
+  background-color: var(--color-green);
+  color: var(--color-dark);
+}
+
+.orchestration-icon {
+  background-color: var(--color-orange);
+  color: var(--color-light);
+}
+
+.edge-icon {
+  background-color: var(--color-blue);
+  color: var(--color-dark);
+}
+
+.status-completed {
+  background-color: var(--color-green);
+  color: var(--color-dark);
+}
+
+.status-pending {
+  background-color: var(--color-orange);
+  color: var(--color-light);
+}
+
+.status-error {
+  background-color: var(--color-magenta);
+  color: var(--color-light);
 }

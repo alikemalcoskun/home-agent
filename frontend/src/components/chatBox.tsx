@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useWebSocket } from "../hooks/useWebSocket";
 
 interface Message {
@@ -27,7 +27,16 @@ const ChatBox: React.FC = () => {
   const [steps, setSteps] = useState<Step[]>([]);
   const [activeTab, setActiveTab] = useState<TabType>("chat");
   
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const stepsEndRef = useRef<HTMLDivElement>(null);
+  
   const { isConnected, lastMessage, connect, disconnect } = useWebSocket();
+
+  const scrollToBottom = (ref: React.RefObject<HTMLDivElement | null>) => {
+    if (ref.current) {
+      ref.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   // Handle WebSocket messages
   useEffect(() => {
@@ -35,6 +44,7 @@ const ChatBox: React.FC = () => {
       // Update steps from blackboard history
       if (lastMessage.blackboard?.history?.steps) {
         setSteps(lastMessage.blackboard.history.steps);
+        setTimeout(() => scrollToBottom(stepsEndRef), 100);
       }
 
       // Only add messages that are completed or error
@@ -45,6 +55,7 @@ const ChatBox: React.FC = () => {
           type: lastMessage.status,
           data: lastMessage
         });
+        setTimeout(() => scrollToBottom(messagesEndRef), 100);
       }
     }
   }, [lastMessage]);
@@ -113,173 +124,6 @@ const ChatBox: React.FC = () => {
 
   return (
     <div className="dashboard-box chatbox-widget">
-      <style>
-        {`
-          @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
-          
-          .chat-message {
-            margin: 8px 0;
-            padding: 10px;
-            border-radius: 8px;
-            max-width: 80%;
-          }
-          .user-msg {
-            background-color: #e3f2fd;
-            margin-left: auto;
-          }
-          .system-msg {
-            background-color: #f5f5f5;
-            margin-right: auto;
-          }
-          .error {
-            background-color: #ffebee !important;
-            color: #c62828;
-            border: 1px solid #ef9a9a;
-          }
-          .completed {
-            background-color: #e8f5e9 !important;
-            color: #2e7d32;
-            border: 1px solid #a5d6a7;
-          }
-          .chatbox-messages {
-            height: calc(100% - 60px);
-            overflow-y: auto;
-            padding: 10px;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            margin-bottom: 10px;
-          }
-          .steps-container {
-            height: calc(100% - 60px);
-            overflow-y: auto;
-            padding: 10px;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            margin-bottom: 10px;
-          }
-          .chatbox-input {
-            display: flex;
-            gap: 10px;
-            padding: 10px 0;
-            position: sticky;
-            bottom: 0;
-            background-color: white;
-          }
-          .chatbox-input input {
-            flex: 1;
-            padding: 8px;
-            border: 1px solid #e0e0e0;
-            border-radius: 4px;
-          }
-          .chatbox-input button {
-            padding: 8px 16px;
-            background-color: #2196f3;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-          }
-          .chatbox-input button:hover {
-            background-color: #1976d2;
-          }
-          .tabs {
-            display: flex;
-            border-bottom: 1px solid #e0e0e0;
-            margin-bottom: 15px;
-          }
-          .tab {
-            padding: 10px 20px;
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            color: #757575;
-          }
-          .tab.active {
-            color: #2196f3;
-            border-bottom-color: #2196f3;
-          }
-          .tab-content {
-            display: none;
-            height: 500px;
-            position: relative;
-          }
-          .tab-content.active {
-            display: flex;
-            flex-direction: column;
-          }
-          .steps-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-          }
-          .step-item {
-            padding: 12px;
-            margin: 8px 0;
-            border-radius: 8px;
-            background-color: white;
-            border: 1px solid #e0e0e0;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-          }
-          .step-agent {
-            font-weight: bold;
-            color: #2196f3;
-            text-transform: uppercase;
-            min-width: 120px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-          }
-          .step-description {
-            flex: 1;
-            color: #424242;
-          }
-          .step-status {
-            padding: 4px 12px;
-            border-radius: 16px;
-            font-size: 0.8em;
-            white-space: nowrap;
-          }
-          .agent-icon {
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            background-color: #e3f2fd;
-            color: #2196f3;
-            font-weight: bold;
-          }
-          .agent-icon .material-icons {
-            font-size: 16px;
-          }
-          .planner-icon {
-            background-color: #e8f5e9;
-            color: #2e7d32;
-          }
-          .orchestration-icon {
-            background-color: #fff3e0;
-            color: #ef6c00;
-          }
-          .edge-icon {
-            background-color: #e3f2fd;
-            color: #2196f3;
-          }
-          .status-completed {
-            background-color: #e8f5e9;
-            color: #2e7d32;
-          }
-          .status-pending {
-            background-color: #fff3e0;
-            color: #ef6c00;
-          }
-          .status-error {
-            background-color: #ffebee;
-            color: #c62828;
-          }
-        `}
-      </style>
       <h2>Chat Box</h2>
       <div className="tabs">
         <div 
@@ -306,6 +150,7 @@ const ChatBox: React.FC = () => {
               {msg.text}
             </div>
           ))}
+          <div ref={messagesEndRef} />
         </div>
         <div className="chatbox-input">
           <input
@@ -345,6 +190,7 @@ const ChatBox: React.FC = () => {
               </li>
             ))}
           </ul>
+          <div ref={stepsEndRef} />
         </div>
         <div className="chatbox-input">
           <input
