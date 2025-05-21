@@ -1,11 +1,12 @@
 from fastapi import APIRouter, status, HTTPException
 from celery import Celery
 from typing import Dict
-from app.models.agent import AgentRequest, AgentResponse
+from app.models.agent import AgentRequest
 from app.services.orchestration import OrchestrationService
 from app.models.state import State
 from loguru import logger
 import json
+from app.api.v2.routes.tasks import broadcast_task_update
 
 # Initialize Celery with both broker and result backend
 celery_app = Celery(
@@ -38,6 +39,15 @@ def process_agent_task(request_data: Dict):
         # Convert blackboard to dictionary for JSON serialization
         blackboard_dict = json.loads(state.blackboard.model_dump_json())
 
+        # Send update to WebSocket
+        broadcast_task_update(
+            process_agent_task.request.id,
+            {
+                "status": "completed",
+                "blackboard": blackboard_dict
+            }
+        )
+        
         logger.info(f"Blackboard: {blackboard_dict}, {type(blackboard_dict)}")
         
         return {
@@ -46,6 +56,14 @@ def process_agent_task(request_data: Dict):
         }
     except Exception as e:
         logger.error(f"Error in agent task: {e}")
+        # Send error to WebSocket
+        broadcast_task_update(
+            process_agent_task.request.id,
+            {
+                "status": "error",
+                "error": str(e)
+            }
+        )
         return {
             "status": "error",
             "error": str(e)

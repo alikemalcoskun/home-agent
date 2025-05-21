@@ -44,7 +44,7 @@ services:
       - ./backend:/app
     ports: 
       - "5172:5172"
-    command: sh -c "uvicorn app.main:app --host 0.0.0.0 --port 5172  --reload"
+    command: sh -c "uvicorn app.main:app --host 0.0.0.0 --port 5172  --reload --ws=websockets"
     depends_on:
       - redis
     networks: 
