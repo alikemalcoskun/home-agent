@@ -109,8 +109,8 @@ const Security: React.FC<SecurityProps> = ({ handleSend }) => {
     // Initial fetch
     fetchSecurityData();
 
-    // Set up polling every 10 seconds
-    const interval = setInterval(fetchSecurityData, 10000);
+    // Set up polling every 2 seconds
+    const interval = setInterval(fetchSecurityData, 1000);
 
     // Cleanup interval on component unmount
     return () => clearInterval(interval);
