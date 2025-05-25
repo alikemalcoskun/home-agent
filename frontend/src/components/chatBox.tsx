@@ -36,7 +36,7 @@ const ChatBox: React.FC = () => {
     "User leaves home",
     "Good morning! Update me on today!",
     "Open all the windows if it is sunny",
-    "What is the name given to the person hanging from a rope who wipes windows or performs technical operations in tall buildings?",
+    "Who is the person traversing ropes to wipe windows or perform technical operations in tall buildings?",
     "Close all the windows if it is rainy",
     "Get the room temperature and humidity"
   ];
