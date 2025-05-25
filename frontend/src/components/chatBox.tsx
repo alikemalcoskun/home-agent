@@ -37,7 +37,8 @@ const ChatBox: React.FC = () => {
     "Good morning! Update me on today!",
     "Open all the windows if it is sunny",
     "What is the name given to the person hanging from a rope who wipes windows or performs technical operations in tall buildings?",
-    "Close all the windows if it is rainy"
+    "Close all the windows if it is rainy",
+    "Get the room temperature and humidity"
   ];
 
   const handleQuestionClick = (question: string) => {

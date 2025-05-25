@@ -14,7 +14,7 @@ from app.agents.edge_agents.news import NewsAgent
 from app.agents.edge_agents.calendar import CalendarAgent
 from app.agents.edge_agents.email import EmailAgent
 from app.agents.edge_agents.shopping import ShoppingAgent
-
+from app.agents.edge_agents.room_temperature import RoomTemperatureAgent
 from app.api.v2.routes.tasks import broadcast_task_update
 
 from loguru import logger
@@ -28,7 +28,7 @@ class OrchestrationServiceAsync:
         self.router_builder = StateGraph(State)
         self.workflow = None
         self.iteration_count = 0
-        self.max_iterations = 5  # Maximum number of iterations to prevent infinite loops
+        self.max_iterations = 8  # Maximum number of iterations to prevent infinite loops
 
         # Initialize agents
         self.planner_agent = PlannerAgent()
@@ -42,7 +42,8 @@ class OrchestrationServiceAsync:
             "news": NewsAgent(),
             "calendar": CalendarAgent(),
             "email": EmailAgent(),
-            "shopping": ShoppingAgent()
+            "shopping": ShoppingAgent(),
+            "room_temperature": RoomTemperatureAgent()
         }
 
     def generate_workflow(self) -> StateGraph:

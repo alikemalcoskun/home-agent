@@ -42,6 +42,10 @@ class State(BaseModel):
         {
             "name": "water_tank",
             "description": "Could get the water level from the water tank IOT device.",
+        },
+        {
+            "name": "room_temperature",
+            "description": "Responsible for getting the room temperature and room humidity from the room temperature IOT device.",
         }
     ]
     blackboard: Blackboard = Blackboard(

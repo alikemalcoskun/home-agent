@@ -13,6 +13,7 @@ from app.agents.edge_agents.news import NewsAgent
 from app.agents.edge_agents.calendar import CalendarAgent
 from app.agents.edge_agents.email import EmailAgent
 from app.agents.edge_agents.shopping import ShoppingAgent
+from app.agents.edge_agents.room_temperature import RoomTemperatureAgent
 from typing import Dict, Any
 
 from loguru import logger
@@ -37,7 +38,8 @@ class OrchestrationService:
             "news": NewsAgent(),
             "calendar": CalendarAgent(),
             "email": EmailAgent(),
-            "shopping": ShoppingAgent()
+            "shopping": ShoppingAgent(),
+            "room_temperature": RoomTemperatureAgent()
         }
 
     def generate_workflow(self) -> StateGraph:
