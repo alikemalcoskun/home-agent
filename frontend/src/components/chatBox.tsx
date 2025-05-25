@@ -32,6 +32,18 @@ const ChatBox: React.FC = () => {
   
   const { isConnected, lastMessage, connect, disconnect } = useWebSocket();
 
+  const predeterminedQuestions = [
+    "User leaves home",
+    "Good morning! Update me on today!",
+    "Open all the windows if it is sunny",
+    "What is the name given to the person hanging from a rope who wipes windows or performs technical operations in tall buildings?",
+    "Close all the windows if it is rainy"
+  ];
+
+  const handleQuestionClick = (question: string) => {
+    setInput(question);
+  };
+
   const scrollToBottom = (ref: React.RefObject<HTMLDivElement | null>) => {
     if (ref.current) {
       const container = ref.current.parentElement;
@@ -155,6 +167,18 @@ const ChatBox: React.FC = () => {
         >
           Steps
         </div>
+      </div>
+      
+      <div className="question-cards-grid">
+        {predeterminedQuestions.map((question, idx) => (
+          <div 
+            key={idx}
+            className="question-card"
+            onClick={() => handleQuestionClick(question)}
+          >
+            {question}
+          </div>
+        ))}
       </div>
       
       <div className={`tab-content ${activeTab === "chat" ? "active" : ""}`}>
