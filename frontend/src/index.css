@@ -736,7 +736,7 @@ code {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 60px;
+  min-height: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
