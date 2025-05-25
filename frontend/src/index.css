@@ -515,6 +515,146 @@ code {
   font-weight: 500;
 }
 
+/* Room Temperature Widget */
+
+.room-temperature-widget {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.room-temperature-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  justify-content: center;
+  flex: 1;
+}
+
+.loading-indicator {
+  font-size: 14px;
+  opacity: 0.7;
+  color: var(--color-dark);
+  font-weight: 500;
+}
+
+.error-message {
+  color: var(--color-orange);
+  font-size: 12px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.climate-data {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  gap: 20px;
+  align-items: center;
+}
+
+.temperature-section, .humidity-section {
+  flex: 1;
+  text-align: center;
+  padding: 20px 15px;
+  border-radius: 12px;
+  background-color: color-mix(in srgb, var(--color-teal), transparent 80%);
+  border: 2px solid var(--color-teal);
+  max-width: 150px;
+}
+
+.temperature-display, .humidity-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.climate-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: color-mix(in srgb, var(--color-teal), transparent 50%);
+  margin-bottom: 5px;
+}
+
+.climate-icon .material-icons {
+  font-size: 24px;
+  color: var(--color-dark);
+}
+
+.temperature-value, .humidity-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: inherit;
+}
+
+.temperature-label, .humidity-label {
+  font-size: 11px;
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-dark);
+  font-weight: 600;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  background-color: color-mix(in srgb, var(--color-green), transparent 80%);
+  padding: 10px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--color-green);
+}
+
+.status-indicator.network_error {
+  background-color: color-mix(in srgb, var(--color-orange), transparent 80%);
+  border-color: var(--color-orange);
+}
+
+.status-indicator.loading {
+  background-color: color-mix(in srgb, var(--color-blue), transparent 80%);
+  border-color: var(--color-blue);
+}
+
+.status-icon {
+  font-size: 16px !important;
+  color: var(--color-dark);
+}
+
+.status-indicator.loading .status-icon {
+  animation: spin 1s linear infinite;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-green);
+  animation: pulse 2s infinite;
+}
+
+.status-dot.normal {
+  background-color: var(--color-green);
+}
+
+.status-text {
+  font-size: 11px;
+  color: var(--color-dark);
+  font-weight: 600;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 /* Window Widget */
 
 .window-widget {
@@ -804,4 +944,70 @@ code {
 .status-error {
   background-color: var(--color-magenta);
   color: var(--color-light);
+}
+
+/* Security Widget */
+.security-widget {
+  min-height: 200px;
+}
+
+.security-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  justify-content: center;
+  min-height: 150px;
+}
+
+.security-data {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.occupancy-section {
+  background: var(--color-teal);
+  border: 2px solid var(--color-dark);
+  border-radius: 15px;
+  padding: 20px;
+  text-align: center;
+  min-width: 150px;
+}
+
+.occupancy-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.security-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  margin-bottom: 5px;
+}
+
+.security-icon .material-icons {
+  font-size: 24px;
+  color: inherit;
+}
+
+.occupancy-value {
+  font-size: 18px;
+  font-weight: bold;
+  color: inherit;
+}
+
+.occupancy-label {
+  font-size: 12px;
+  color: var(--color-dark);
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }

@@ -9,13 +9,16 @@ import WaterTank from "./components/waterTank";
 import Weather from "./components/weather";
 import Window from "./components/window";
 import ChatBox from "./components/chatBox";
-
+import RoomTemperature from "./components/roomTemperature";
+import Security from "./components/security";
 const Dashboard: React.FC = () => {
   return (
     <div className="dashboard-container">
       <h1 className="dashboard-title">Dashboard</h1>
       <div className="dashboard-grid">
         <ChatBox />
+        <RoomTemperature />
+        <Security />
         <Calendar />
         <Email />
         <Light />
