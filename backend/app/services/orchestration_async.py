@@ -15,6 +15,8 @@ from app.agents.edge_agents.calendar import CalendarAgent
 from app.agents.edge_agents.email import EmailAgent
 from app.agents.edge_agents.shopping import ShoppingAgent
 from app.agents.edge_agents.room_temperature import RoomTemperatureAgent
+from app.agents.edge_agents.emergency import EmergencyAgent
+from app.agents.edge_agents.security import SecurityAgent
 from app.api.v2.routes.tasks import broadcast_task_update
 
 from loguru import logger
@@ -43,7 +45,10 @@ class OrchestrationServiceAsync:
             "calendar": CalendarAgent(),
             "email": EmailAgent(),
             "shopping": ShoppingAgent(),
-            "room_temperature": RoomTemperatureAgent()
+            "room_temperature": RoomTemperatureAgent(),
+            "humidity": RoomTemperatureAgent(),  # Alias for humidity requests
+            "emergency": EmergencyAgent(),
+            "security": SecurityAgent()
         }
 
     def generate_workflow(self) -> StateGraph:

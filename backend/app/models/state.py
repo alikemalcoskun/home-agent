@@ -46,6 +46,14 @@ class State(BaseModel):
         {
             "name": "room_temperature",
             "description": "Responsible for getting the room temperature and room humidity from the room temperature IOT device.",
+        },
+        {
+            "name": "emergency",
+            "description": "Responsible for handling emergency situations, calling emergency services(police, fire, ambulance, family, neighbor), and managing emergency contacts.",
+        },
+        {
+            "name": "security",
+            "description": "Responsible for monitoring home security, checking occupancy/ stranger movements.",
         }
     ]
     blackboard: Blackboard = Blackboard(
