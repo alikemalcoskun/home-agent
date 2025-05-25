@@ -53,7 +53,7 @@ class State(BaseModel):
         },
         {
             "name": "security",
-            "description": "Responsible for monitoring home security, checking occupancy/ stranger movements.",
+            "description": "Responsible for monitoring home security, checking occupancy / stranger movements, and safe box door status(open/close).",
         }
     ]
     blackboard: Blackboard = Blackboard(

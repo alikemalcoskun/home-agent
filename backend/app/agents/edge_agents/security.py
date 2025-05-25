@@ -9,7 +9,7 @@ import requests
 
 def check_occupancy() -> Dict[str, Any]:
     logger.info("Checking occupancy and stranger movements")
-    response = requests.get("https://sensors.davidoglu.vip/api/v1/iot-1/occupancy")
+    response = requests.get("https://sensors.davidoglu.vip/api/v1/iot-2/occupancy")
     response = response.json()
     if response.get("status") == "success":
         occupancy = True if response.get("message") == 1 else False
@@ -19,6 +19,26 @@ def check_occupancy() -> Dict[str, Any]:
     return {
         "status": "success",
         "occupancy": occupancy
+    }
+
+def check_safe_box_door_status() -> Dict[str, Any]:
+    logger.info("Checking safe box door status")
+    response = requests.get("https://sensors.davidoglu.vip/api/v1/iot-2/heading")
+    response = response.json()
+    if response.get("status") == "success":
+        heading = response.get("message")
+        # if heading in in range of 0-180, it is open, close otherwise
+        if heading is not None:
+            if heading < 180:
+                safe_box_door_status = "open"
+            else:
+                safe_box_door_status = "close"
+        logger.info("Heading checked successfully")
+    else:
+        safe_box_door_status = None
+    return {
+        "status": "success",
+        "safe_box_door_status": safe_box_door_status
     }
 
 

@@ -61,7 +61,8 @@ const ChatBox = forwardRef<ChatBoxRef, ChatBoxProps>(({
     "Open all the windows if it is sunny",
     "Who is the person traversing ropes to wipe windows or perform technical operations in tall buildings?",
     "Close all the windows if it is rainy",
-    "Get the room temperature and humidity"
+    "Get the room temperature and humidity",
+    "Is my safe box door open?",
   ];
 
   const handleQuestionClick = (question: string) => {
