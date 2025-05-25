@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 import { useWebSocket } from "../hooks/useWebSocket";
 
 interface Message {
@@ -18,12 +18,30 @@ interface Step {
   status: string;
 }
 
+interface ChatBoxProps {
+  messages: Message[];
+  setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
+  currentTaskId: string | null;
+  setCurrentTaskId: React.Dispatch<React.SetStateAction<string | null>>;
+  handleSend: (input: string, owner?: string) => Promise<void>;
+  addMessage: (message: Message) => void;
+}
+
+interface ChatBoxRef {
+  connect: (taskId: string) => void;
+}
+
 type TabType = "chat" | "steps";
 
-const ChatBox: React.FC = () => {
-  const [messages, setMessages] = useState<Message[]>([]);
+const ChatBox = forwardRef<ChatBoxRef, ChatBoxProps>(({ 
+  messages, 
+  setMessages, 
+  currentTaskId, 
+  setCurrentTaskId, 
+  handleSend: parentHandleSend, 
+  addMessage 
+}, ref) => {
   const [input, setInput] = useState("");
-  const [currentTaskId, setCurrentTaskId] = useState<string | null>(null);
   const [steps, setSteps] = useState<Step[]>([]);
   const [activeTab, setActiveTab] = useState<TabType>("chat");
   
@@ -31,6 +49,11 @@ const ChatBox: React.FC = () => {
   const stepsEndRef = useRef<HTMLDivElement>(null);
   
   const { isConnected, lastMessage, connect, disconnect } = useWebSocket();
+
+  // Expose connect function to parent via ref
+  useImperativeHandle(ref, () => ({
+    connect
+  }));
 
   const predeterminedQuestions = [
     "User leaves home",
@@ -74,7 +97,7 @@ const ChatBox: React.FC = () => {
         setTimeout(() => scrollToBottom(messagesEndRef), 100);
       }
     }
-  }, [lastMessage]);
+  }, [lastMessage, addMessage]);
 
   // Scroll to bottom when messages or steps change
   useEffect(() => {
@@ -100,49 +123,9 @@ const ChatBox: React.FC = () => {
     return JSON.stringify(message, null, 2);
   };
 
-  const addMessage = (message: Message) => {
-    setMessages((prev: Message[]) => [...prev, message]);
-  };
-
-  const handleSend = async () => {
-    if (input.trim() === "") return;
-
-    const userMessage: Message = {
-      text: input,
-      sender: "user",
-    };
-
-    setMessages((prev: Message[]) => [...prev, userMessage]);
+  const handleLocalSend = async (owner: string = "user") => {
+    await parentHandleSend(input, owner);
     setInput("");
-
-    try {
-      const response = await fetch("http://localhost:5172/api/v2/async/agent/run", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ query: input, owner: "user" }),
-      });
-
-      const data: TaskResponse = await response.json();
-
-      if (response.ok) {
-        setCurrentTaskId(data.task_id);
-        connect(data.task_id);
-      } else {
-        addMessage({
-          text: `Failed to start task: ${data}`,
-          sender: "system",
-          type: "error"
-        });
-      }
-    } catch (error) {
-      addMessage({
-        text: `Error: ${error}`,
-        sender: "system",
-        type: "error"
-      });
-    }
   };
 
   // Cleanup WebSocket connection when component unmounts
@@ -200,9 +183,9 @@ const ChatBox: React.FC = () => {
             placeholder="Type a message..."
             value={input}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value)}
-            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === "Enter" && handleSend()}
+            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === "Enter" && handleLocalSend("user")}
           />
-          <button onClick={handleSend}>Send</button>
+          <button onClick={() => handleLocalSend("user")}>Send</button>
         </div>
       </div>
 
@@ -240,13 +223,15 @@ const ChatBox: React.FC = () => {
             placeholder="Type a message..."
             value={input}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value)}
-            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === "Enter" && handleSend()}
+            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === "Enter" && handleLocalSend()}
           />
-          <button onClick={handleSend}>Send</button>
+          <button onClick={() => handleLocalSend()}>Send</button>
         </div>
       </div>
     </div>
   );
-};
+});
+
+ChatBox.displayName = 'ChatBox';
 
 export default ChatBox;

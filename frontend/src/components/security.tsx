@@ -1,19 +1,49 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 
 interface SecurityState {
   occupancy: boolean | null;
   status: "normal" | "error" | "loading" | "network_error";
   loading: boolean;
   error: string | null;
+  previousOccupancy: boolean | null;
 }
 
-const Security: React.FC = () => {
+interface SecurityProps {
+  handleSend: (input: string, owner?: string) => Promise<void>;
+}
+
+const Security: React.FC<SecurityProps> = ({ handleSend }) => {
   const [securityData, setSecurityData] = useState<SecurityState>({
     occupancy: null,
     status: "loading",
     loading: true,
-    error: null
+    error: null,
+    previousOccupancy: null,
   });
+
+  const alertInProgress = useRef(false);
+
+  const sendSecurityMessage = async (occupancyStatus: boolean) => {
+    if (alertInProgress.current) {
+      console.log("Alert already in progress, skipping...");
+      return;
+    }
+    
+    alertInProgress.current = true;
+    const message = `Occupancy: ${occupancyStatus ? 'True' : 'False'}. Inform user and take action`;
+    
+    try {
+      await handleSend(message, "security_agent");
+      console.log("Security alert sent successfully");
+    } catch (error) {
+      console.error("Error sending security alert:", error);
+    } finally {
+      // Reset the flag after a short delay
+      setTimeout(() => {
+        alertInProgress.current = false;
+      }, 1000);
+    }
+  };
 
   const fetchOccupancy = async () => {
     const response = await fetch("https://sensors.davidoglu.vip/api/v1/iot-1/occupancy");
@@ -40,11 +70,29 @@ const Security: React.FC = () => {
       
       const occupancy = await fetchOccupancy();
 
-      setSecurityData({
-        occupancy,
-        status: "normal",
-        loading: false,
-        error: null
+      setSecurityData(prev => {
+        // Only alert if occupancy changes from false/null to true
+        const shouldAlert = occupancy === true && 
+                           prev.occupancy !== true; // Previous was not true (either false or null)
+        
+        console.log("Security Debug:", {
+          previousOccupancy: prev.occupancy,
+          currentOccupancy: occupancy,
+          shouldAlert
+        });
+        
+        if (shouldAlert) {
+          console.log("Sending security alert!");
+          sendSecurityMessage(occupancy);
+        }
+
+        return {
+          occupancy,
+          status: "normal",
+          loading: false,
+          error: null,
+          previousOccupancy: prev.occupancy, // Store current as previous for next comparison
+        };
       });
     } catch (error) {
       console.error("Network error:", error);
@@ -70,7 +118,7 @@ const Security: React.FC = () => {
 
   const getOccupancyColor = () => {
     if (securityData.occupancy === null) return "var(--color-dark)";
-    return securityData.occupancy ? "#7ED321" : "#E94B3C"; // Green if occupied, Red if not
+    return securityData.occupancy ? "#E94B3C" : "#7ED321"; // Green if not occupied, Red if
   };
 
   const getStatusMessage = () => {
@@ -100,6 +148,11 @@ const Security: React.FC = () => {
     return securityData.occupancy ? "person" : "person_off";
   };
 
+  const getOccupancyClass = () => {
+    if (securityData.occupancy === null) return "unknown";
+    return securityData.occupancy ? "occupied" : "empty";
+  };
+
   return (
     <div className="dashboard-box security-widget">
       <h2>
@@ -110,7 +163,7 @@ const Security: React.FC = () => {
       </h2>
       <div className="security-wrapper">
         <div className="security-data">
-          <div className="occupancy-section">
+          <div className={`occupancy-section ${getOccupancyClass()}`}>
             <div 
               className="occupancy-display"
               style={{ color: getOccupancyColor() }}

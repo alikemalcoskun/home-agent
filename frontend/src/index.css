@@ -948,6 +948,8 @@ code {
 
 /* Security Widget */
 .security-widget {
+  display: flex;
+  flex-direction: column;
   min-height: 200px;
 }
 
@@ -957,22 +959,40 @@ code {
   gap: 15px;
   align-items: center;
   justify-content: center;
-  min-height: 150px;
+  flex: 1;
+  height: 100%;
 }
 
 .security-data {
   display: flex;
   justify-content: center;
+  align-items: center;
   width: 100%;
 }
 
 .occupancy-section {
-  background: var(--color-teal);
-  border: 2px solid var(--color-dark);
-  border-radius: 15px;
-  padding: 20px;
+  flex: 1;
   text-align: center;
+  padding: 20px 15px;
+  border-radius: 12px;
+  border: 2px solid var(--color-teal);
   min-width: 150px;
+  max-width: 150px;
+}
+
+.occupancy-section.occupied {
+  background-color: color-mix(in srgb, var(--color-red), transparent 80%);
+  border-color: #E94B3C;
+}
+
+.occupancy-section.empty {
+  background-color: color-mix(in srgb, var(--color-teal), transparent 80%);
+  border-color: #7ED321;
+}
+
+.occupancy-section.unknown {
+  background-color: color-mix(in srgb, var(--color-lavender), transparent 80%);
+  border-color: var(--color-teal);
 }
 
 .occupancy-display {
@@ -989,13 +1009,25 @@ code {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
+  background-color: color-mix(in srgb, var(--color-teal), transparent 50%);
   margin-bottom: 5px;
+}
+
+.occupancy-section.occupied .security-icon {
+  background-color: color-mix(in srgb, var(--color-orange), transparent 50%);
+}
+
+.occupancy-section.empty .security-icon {
+  background-color: color-mix(in srgb, var(--color-teal), transparent 50%);
+}
+
+.occupancy-section.unknown .security-icon {
+  background-color: color-mix(in srgb, var(--color-lavender), transparent 50%);
 }
 
 .security-icon .material-icons {
   font-size: 24px;
-  color: inherit;
+  color: var(--color-dark);
 }
 
 .occupancy-value {
