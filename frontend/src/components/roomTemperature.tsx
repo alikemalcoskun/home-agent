@@ -95,8 +95,8 @@ const RoomTemperature: React.FC = () => {
 
   const getTemperatureColor = () => {
     if (roomData.temperature === null) return "var(--color-dark)";
-    if (roomData.temperature < 18) return "#4A90E2"; // Cold - Blue
-    if (roomData.temperature > 26) return "#E94B3C"; // Hot - Red
+    if (roomData.temperature < 5) return "#4A90E2"; // Cold - Blue
+    if (roomData.temperature > 30) return "#E94B3C"; // Hot - Red
     return "#7ED321"; // Normal - Green
   };
 
