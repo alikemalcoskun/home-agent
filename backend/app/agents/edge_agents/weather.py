@@ -8,8 +8,8 @@ from loguru import logger
 def get_current_weather() -> Dict[str, Any]:
     logger.info("Getting current weather")
     return {
-        "temperature": 72,
-        "condition": "sunny",
+        "temperature": 23,
+        "condition": "rainy",
         "humidity": 45,
         "wind_speed": 5
     }
@@ -18,9 +18,9 @@ def get_weather_forecast(days: int = 3) -> Dict[str, Any]:
     logger.info(f"Getting weather forecast for {days} days")
     return {
         "forecast": [
-            {"day": "today", "temperature": 72, "condition": "sunny"},
-            {"day": "tomorrow", "temperature": 68, "condition": "cloudy"},
-            {"day": "day_after", "temperature": 65, "condition": "rainy"}
+            {"day": "today", "temperature": 23, "condition": "rainy"},
+            {"day": "tomorrow", "temperature": 20, "condition": "cloudy"},
+            {"day": "day_after", "temperature": 18, "condition": "rainy"}
         ]
     }
 

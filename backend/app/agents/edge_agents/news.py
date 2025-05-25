@@ -5,26 +5,26 @@ from langchain_core.tools import Tool, StructuredTool
 
 from loguru import logger
 
-def get_top_headlines() -> List[Dict[str, str]]:
+def get_top_headlines() -> List[Dict[str, Any]]:
     logger.info("Getting top headlines")
     return [
-        {"title": "Breaking News", "source": "CNN", "url": "https://example.com/1"},
-        {"title": "Local Update", "source": "Local News", "url": "https://example.com/2"},
-        {"title": "Technology News", "source": "Tech Daily", "url": "https://example.com/3"}
+        {"id": 1, "newspaper": "The Washington Post", "subject": "Trump, visiting Capitol Hill, warns House Republicans against opposing his bill", "preview": "President Donald Trump warned House Republicans against opposing his massive tax and immigration bill as he visited Capitol Hill on Monday in a bid to bolster support for the package.", "date": "May 20, 2025"},
+        {"id": 2, "newspaper": "The New York Times", "subject": "New Orleans Jail Employee Is Arrested and Charged With Helping 10 Inmates Escape", "preview": "A maintenance worker shut off water at the jail, allowing the inmates to remove a toilet and sink fixture from a cell wall, according to the Louisiana attorney general's office.", "date": "May 20, 2025"},
+        {"id": 3, "newspaper": "engadget", "subject": "Everything announced at the Google I/O 2025 keynote", "preview": "A tidal wave of AI updates (plus some other stuff).", "date": "May 20, 2025"}
     ]
 
-def get_news_by_category(category: str) -> List[Dict[str, str]]:
+def get_news_by_category(category: str) -> List[Dict[str, Any]]:
     logger.info(f"Getting news by category: {category}")
     return [
-        {"title": f"{category} News 1", "source": "News Source", "url": "https://example.com/4"},
-        {"title": f"{category} News 2", "source": "News Source", "url": "https://example.com/5"}
+        {"id": 4, "newspaper": "News Source", "subject": f"{category} News 1", "preview": f"This is a preview of {category} news article 1", "date": "May 19, 2025"},
+        {"id": 5, "newspaper": "News Source", "subject": f"{category} News 2", "preview": f"This is a preview of {category} news article 2", "date": "May 19, 2025"}
     ]
 
-def search_news(query: str) -> List[Dict[str, str]]:
+def search_news(query: str) -> List[Dict[str, Any]]:
     logger.info(f"Searching news for: {query}")
     return [
-        {"title": f"Result for {query} 1", "source": "News Source", "url": "https://example.com/6"},
-        {"title": f"Result for {query} 2", "source": "News Source", "url": "https://example.com/7"}
+        {"id": 6, "newspaper": "News Source", "subject": f"Result for {query} 1", "preview": f"This is a preview of search result for {query} 1", "date": "May 18, 2025"},
+        {"id": 7, "newspaper": "News Source", "subject": f"Result for {query} 2", "preview": f"This is a preview of search result for {query} 2", "date": "May 18, 2025"}
     ]
 
 

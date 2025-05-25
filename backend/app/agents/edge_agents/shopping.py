@@ -24,9 +24,9 @@ def get_shopping_history() -> List[Dict[str, Any]]:
 def get_current_offers() -> List[Dict[str, Any]]:
     logger.info("Getting current offers")
     return [
-        {"item": "Item 1", "discount": "20%", "valid_until": "2023-04-30"},
-        {"item": "Item 2", "discount": "10%", "valid_until": "2023-05-15"},
-        {"item": "Item 3", "discount": "15%", "valid_until": "2023-04-25"}
+        {"item": "Pizza 1", "price": 19.99, "discount": "20%", "valid_until": "2023-04-30"},
+        {"item": "Pizza 2", "price": 29.99, "discount": "10%", "valid_until": "2023-05-15"},
+        {"item": "Pizza 3", "price": 39.99, "discount": "15%", "valid_until": "2023-04-25"}
     ]
 
 def add_to_cart(item: str, quantity: int = 1) -> Dict[str, Any]:
@@ -37,6 +37,13 @@ def checkout() -> Dict[str, Any]:
     logger.info("Checking out cart")
     return {"status": "completed", "order_id": "12345", "total": 69.98}
 
+def get_shopping_list() -> List[Dict[str, Any]]:
+    logger.info("Getting shopping list")
+    return [
+        {"id": 1, "order": "Oranges", "isOrdered": True},
+        {"id": 2, "order": "Milk", "isOrdered": False},
+        {"id": 3, "order": "Rice", "isOrdered": True}
+    ]
 
 class ShoppingAgent(EdgeAgent):
     def __init__(self):
@@ -105,6 +112,16 @@ class ShoppingAgent(EdgeAgent):
                 name="checkout",
                 description="Checkout the cart",
                 func=checkout,
+                args_schema={
+                    "type": "object",
+                    "properties": {},
+                    "required": []
+                }
+            ),
+            StructuredTool.from_function(
+                name="get_shopping_list",
+                description="Get the current shopping list",
+                func=get_shopping_list,
                 args_schema={
                     "type": "object",
                     "properties": {},

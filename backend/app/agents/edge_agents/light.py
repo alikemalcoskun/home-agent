@@ -19,7 +19,7 @@ def turn_light_off(light_id: str, location: str) -> str:
 
 def get_all_lights_status() -> Dict[str, str]:
     logger.info("Getting all lights status")
-    return {"living_room": "on", "bedroom": "off", "kitchen": "on", "bathroom": "off"}
+    return {"living_room": "off", "bedroom": "off", "kitchen": "on", "bathroom": "off"}
 
 
 class LightAgent(EdgeAgent):

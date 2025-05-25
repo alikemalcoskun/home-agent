@@ -8,8 +8,9 @@ from loguru import logger
 def get_unread_emails() -> List[Dict[str, Any]]:
     logger.info("Getting unread emails")
     return [
-        {"id": "1", "from": "sender1@example.com", "subject": "Important Meeting", "date": "2023-04-19"},
-        {"id": "2", "from": "sender2@example.com", "subject": "Project Update", "date": "2023-04-19"}
+        {"id": 1, "sender": "Google Haritalar", "subject": "Yorumlarınız Google Haritalar'da çok popüler.", "preview": "Yarattığınız etkiyi kutlayalım.", "date": "May 20", "read": False},
+        {"id": 2, "sender": "LinkedIn", "subject": "New jobs similar to Software Engineer at LinkedIn", "preview": "Jobs similar to Software Engineer at LinkedIn", "date": "May 19", "read": True},
+        {"id": 3, "sender": "The Postman Team", "subject": "New sign-in notification", "preview": "Review new sign-in activity We recently detected a new sign-in for your Postman account. If this was you, no further action is needed.", "date": "May 15", "read": True}
     ]
 
 def search_emails(query: str) -> List[Dict[str, Any]]:

@@ -25,6 +25,9 @@ def set_cooking_timer(minutes: int) -> str:
     logger.info(f"Setting cooking timer for {minutes} minutes")
     return f"Timer set for {minutes} minutes"
 
+def get_all_stoves_status() -> Dict[str, str]:
+    logger.info("Getting all stoves status")
+    return {"kitchen": "off", "barbecue": "on"}
 
 class StoveAgent(EdgeAgent):
     def __init__(self):
@@ -88,6 +91,16 @@ class StoveAgent(EdgeAgent):
                         }
                     },
                     "required": ["minutes"]
+                }
+            ),
+            StructuredTool.from_function(
+                name="get_all_stoves_status",
+                description="Get the status of all stoves",
+                func=get_all_stoves_status,
+                args_schema={
+                    "type": "object",
+                    "properties": {},
+                    "required": []
                 }
             )
         ]

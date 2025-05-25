@@ -7,7 +7,7 @@ from loguru import logger
 
 def check_water_level() -> int:
     logger.info("Checking water level")
-    return 5
+    return 56
 
 def get_water_usage(timeframe: str) -> Dict[str, int]:
     logger.info(f"Getting water usage for {timeframe}")
@@ -19,7 +19,7 @@ def check_water_quality() -> str:
 
 def get_tank_status() -> Dict[str, Any]:
     logger.info("Getting tank status")
-    return {"level": 95, "quality": "good", "last_maintenance": "2023-01-01"}
+    return {"level": 56, "quality": "good", "last_maintenance": "2023-01-01"}
 
 def set_water_alert(threshold: int) -> str:
     logger.info(f"Setting water alert for threshold {threshold}")
